@@ -6,13 +6,8 @@ import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.json.JSONObject;
-
-import java.io.Console;
 import java.io.File;
-import java.util.Arrays;
 import java.util.Scanner;
-
-import static java.lang.System.out;
 import services.Storage;
 import launcher.Builder;
 

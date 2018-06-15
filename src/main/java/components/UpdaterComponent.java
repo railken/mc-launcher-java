@@ -3,13 +3,8 @@ package components;
 import launcher.Builder;
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.io.Console;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import components.BaseComponent;
-
 import static java.lang.System.out;
 import services.Storage;
 

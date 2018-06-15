@@ -1,17 +1,7 @@
 package components;
 
 import launcher.Builder;
-import org.json.JSONObject;
-
-import java.io.Console;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import static java.lang.System.out;
-import services.AuthService;
-import model.User;
-import services.Storage;
 
 public class MinecraftComponent extends BaseComponent {
 

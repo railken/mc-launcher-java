@@ -1,11 +1,7 @@
 
 import static java.lang.System.out;
 
-import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-
-import model.User;
 import launcher.Builder;
 import components.ConfigComponent;
 import components.UserComponent;

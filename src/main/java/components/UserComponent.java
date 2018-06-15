@@ -2,10 +2,8 @@ package components;
 
 import launcher.Builder;
 import org.json.JSONObject;
-
 import java.io.Console;
 import java.util.Arrays;
-
 import static java.lang.System.out;
 import services.AuthService;
 import model.User;
