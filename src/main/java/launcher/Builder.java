@@ -29,6 +29,8 @@ public class Builder {
     public String baseDir;
     public ArrayList<String> libraries;
     public Logger logger;
+    public User user;
+    public JSONObject config;
 
 
     public Builder (String baseDir)

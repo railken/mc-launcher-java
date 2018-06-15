@@ -20,30 +20,29 @@ public class MinecraftComponent extends BaseComponent {
         super(builder);
     }
 
-    public void launch(User user, ArrayList<String> libraries)
+    public void execute()
     {
         String command = "java " +
                 "-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump " +
-                "-Xms4096m -Xmx4096m " +
-                "-XX:+UseG1GC -XX:MaxGCPauseMillis=4 " +
+                " "+builder.config.getString("command")+" "+
                 "-Djava.library.path="+builder.baseDir+"modpack/bin/natives " +
                 "-Dfml.core.libraries.mirror=http://mirror.technicpack.net/Technic/lib/fml/%s " +
                 "-Dminecraft.applet.TargetDirectory="+builder.baseDir+"modpack " +
                 "-Djava.net.preferIPv4Stack=true " +
-                "-cp "+String.join(";",libraries)+" " +
+                "-cp "+String.join(";",builder.libraries)+" " +
                 "net.minecraft.launchwrapper.Launch " +
-                "--username "+user.getUsername()+" " +
+                "--username "+builder.user.getUsername()+" " +
                 "--version 1.12.2-forge1.12.2-14.23.0.2491 " +
                 "--gameDir "+builder.baseDir+"modpack " +
                 "--assetsDir "+builder.baseDir+"assets " +
                 "--assetIndex 1.12 " +
-                "--uuid "+user.getID()+" " +
-                "--accessToken "+user.getAccessToken()+" " +
+                "--uuid "+builder.user.getID()+" " +
+                "--accessToken "+builder.user.getAccessToken()+" " +
                 "--userType mojang " +
                 "--tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker " +
                 "--versionType Forge " +
-                "--title OptiFine 1.12.2 - Forge " +
-                "--icon "+builder.baseDir+"assets/packs/optifine-1122-forge/icon.png\n";
+                "--title Custom Launcher ";
+                //"--icon "+builder.baseDir+"assets/packs/optifine-1122-forge/icon.png\n";
 
         System.out.println(command);
         this.executeCommand(command);

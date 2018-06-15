@@ -23,7 +23,7 @@ public class ConfigComponent extends BaseComponent {
         super(builder);
     }
 
-    public void ini() throws Exception
+    public void execute() throws Exception
     {
 
         Storage configFile = new Storage(this.builder.baseDir+"config.json");
@@ -41,15 +41,21 @@ public class ConfigComponent extends BaseComponent {
 
         if (!config.has("modpack")) {
 
-            this.builder.logger.info("No config found");
             Scanner scan = new Scanner(System.in);
             System.out.print("Modpack URL: ");
             url = scan.next();
-
             config.put("modpack", url);
-            config.put("installed", false);
 
         }
+
+        if (!config.has("installed")) {
+            config.put("installed", false);
+        }
+
+        if (!config.has("command")) {
+            config.put("command", "-Xms4096m -Xmx4096m -XX:+UseG1GC -XX:MaxGCPauseMillis=4");
+        }
+
 
         // Changing path to minecraft
         this.builder.baseDir = this.builder.baseDir+"minecraft/";
@@ -80,6 +86,8 @@ public class ConfigComponent extends BaseComponent {
                     .setRef("origin/master")
                     .call();
         }
+
+        this.builder.config = config;
 
         configFile.set(config.toString());
     }

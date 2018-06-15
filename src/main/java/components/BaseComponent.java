@@ -11,7 +11,6 @@ import launcher.Builder;
 public class BaseComponent {
 
     Builder builder;
-    static String FILE_USER = "user.json";
 
     public BaseComponent (Builder builder)
     {

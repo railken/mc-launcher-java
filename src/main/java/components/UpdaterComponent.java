@@ -20,10 +20,8 @@ public class UpdaterComponent extends BaseComponent {
         super(builder);
     }
 
-    public ArrayList<String> update() throws Exception
+    public void execute() throws Exception
     {
-
-
         out.println("Checking libraries");
         ArrayList<String> libraries = new ArrayList<String>();
 
@@ -124,6 +122,6 @@ public class UpdaterComponent extends BaseComponent {
 
         }
 
-        return libraries;
+        this.builder.libraries = libraries;
     }
 }

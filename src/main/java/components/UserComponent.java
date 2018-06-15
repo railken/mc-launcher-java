@@ -20,7 +20,7 @@ public class UserComponent extends BaseComponent {
         super(builder);
     }
 
-    public User auth() {
+    public void execute() {
         AuthService service = new AuthService();
 
         Storage storage = new Storage(this.builder.baseDir + this.FILE_USER);
@@ -74,12 +74,11 @@ public class UserComponent extends BaseComponent {
             user.setUsername(response.getJSONObject("selectedProfile").getString("name"));
             user.setID(response.getJSONObject("selectedProfile").getString("id"));
 
-            return user;
+            this.builder.user = user;
 
         } catch (Exception e) {
             out.println("Authentication failed");
         }
 
-        return null;
     }
 }

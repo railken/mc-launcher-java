@@ -28,28 +28,27 @@ public class Main{
 
         Builder launcherBuilder = new Builder(baseDir);
 
-        // Configuration
+        // Component:Configuration
         ConfigComponent configComponent = new ConfigComponent(launcherBuilder);
-        configComponent.ini();
+        configComponent.execute();
 
-        // Authentication
+        // Component:Authentication
         UserComponent userComponent = new UserComponent(launcherBuilder);
-        User user = userComponent.auth();
+        userComponent.execute();
 
-        if (user == null) {
+        if (launcherBuilder.user == null) {
             return;
         }
 
-        out.println("Welcome back " + user.toString());
+        out.println("Welcome back " + launcherBuilder.user.toString());
 
-        // Updating
+        // Component:Updating
         UpdaterComponent updaterComponent = new UpdaterComponent(launcherBuilder);
+        updaterComponent.execute();
 
-        ArrayList<String> libraries = updaterComponent.update();
-
-        // Launching
+        // Component:Launching
         MinecraftComponent minecraftComponent = new MinecraftComponent(launcherBuilder);
-        minecraftComponent.launch(user, libraries);
+        minecraftComponent.execute();
 
         out.println("Launching minecraft ...");
 
