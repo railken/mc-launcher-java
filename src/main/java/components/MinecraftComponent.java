@@ -22,7 +22,6 @@ public class MinecraftComponent extends BaseComponent {
                 "-cp "+String.join(";",builder.libraries)+" " +
                 "net.minecraft.launchwrapper.Launch " +
                 "--username "+builder.user.getUsername()+" " +
-                "--version 1.12.2-forge1.12.2-14.23.0.2491 " +
                 "--gameDir "+builder.baseDir+"modpack " +
                 "--assetsDir "+builder.baseDir+"assets " +
                 "--assetIndex 1.12 " +
