@@ -5,11 +5,14 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ResetCommand;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.transport.RemoteConfig;
 import org.json.JSONObject;
 import java.io.File;
+import java.util.List;
 import java.util.Scanner;
 import services.Storage;
 import launcher.Builder;
+import static java.lang.System.out;
 
 public class ConfigComponent extends BaseComponent {
 
@@ -73,7 +76,17 @@ public class ConfigComponent extends BaseComponent {
                     .setGitDir(new File(this.builder.baseDir+"/.git"))
                     .build();
 
+
             Git git = new Git(existingRepo);
+
+            List<RemoteConfig> remotes = git.remoteList().call();
+            for( RemoteConfig remote : remotes ) {
+                git.fetch()
+                        .setRemote( remote.getName() )
+                        .setRefSpecs( remote.getFetchRefSpecs() )
+                        .call();
+            }
+
             git.pull();
             git
                     .reset()
