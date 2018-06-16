@@ -3,6 +3,8 @@ package components;
 import launcher.Builder;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import static java.lang.System.out;
@@ -118,5 +120,62 @@ public class UpdaterComponent extends BaseComponent {
         }
 
         this.builder.libraries = libraries;
+
+        this.updateMods();
+    }
+
+    private void updateMods() throws Exception
+    {
+        Storage modpackFile = new Storage(this.builder.baseDir+"modpack.json");
+
+        if (!modpackFile.exists()) {
+            throw new Exception("Missing file: "+ modpackFile.getFilename());
+        }
+
+        JSONObject info = new JSONObject(modpackFile.get());
+
+        JSONArray mods = info.getJSONArray("mods");
+
+        ArrayList<String> enabled = new ArrayList<String>();
+
+        for(int i = 0; i < mods.length(); i++) {
+            JSONObject mod = mods.getJSONObject(i);
+            String url = mod.getString("url");
+            String name = mod.getString("name");
+            String filename = name + ".jar";
+
+            Storage assetFile = new Storage(this.builder.baseDir+"/modpack/mods/" + filename);
+
+            enabled.add(filename);
+
+            try {
+
+                if(!assetFile.exists())
+                    throw new Exception();
+
+                /*
+                if (!assetFile.getChecksum("sha1").equals(o.getString("hash")))
+                    throw new Exception();
+                */
+
+            } catch (Exception e) {
+                assetFile.download(new URL(url));
+                out.println("Downloaded : " + url);
+            }
+
+        }
+
+        File folder = new File(this.builder.baseDir+"/modpack/mods/");
+        File[] listOfFiles = folder.listFiles();
+
+        for (int i = 0; i < listOfFiles.length; i++) {
+
+            File file = listOfFiles[i];
+            if (!enabled.contains(file.getName())) {
+                out.println("Removing: " + file.getName());
+                file.delete();
+            }
+        }
+
     }
 }

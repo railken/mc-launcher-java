@@ -14,15 +14,29 @@ public class Main{
 
         String baseDir = null;
 
-        if (arguments.length == 1) {
-            baseDir = arguments[0];
+        if (arguments.length == 0) {
+            out.println("You have to provide the modpack name");
         }
 
-        if (arguments.length == 0) {
+        String nameModpack = arguments[0];
+
+        if (arguments.length == 2) {
+            baseDir = arguments[1];
+        }
+
+        if (arguments.length == 1) {
             baseDir = Paths.get(".").toAbsolutePath().normalize().toString()+"/";
         }
 
-        Builder launcherBuilder = new Builder(baseDir);
+        // Play?
+        play(baseDir, nameModpack);
+
+
+    }
+
+    public static void play(String baseDir, String nameModpack) throws Exception {
+
+        Builder launcherBuilder = new Builder(baseDir + "/modpacks/" + nameModpack + "/");
 
         // Component:Configuration
         ConfigComponent configComponent = new ConfigComponent(launcherBuilder);
@@ -47,7 +61,6 @@ public class Main{
         minecraftComponent.execute();
 
         out.println("Launching minecraft ...");
-
 
     }
 
