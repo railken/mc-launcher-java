@@ -78,7 +78,7 @@ public class ConfigComponent extends BaseComponent {
 
 
             Git git = new Git(existingRepo);
-
+            /*
             List<RemoteConfig> remotes = git.remoteList().call();
             for( RemoteConfig remote : remotes ) {
                 git.fetch()
@@ -92,11 +92,11 @@ public class ConfigComponent extends BaseComponent {
                     .reset()
                     .setMode(ResetCommand.ResetType.HARD)
                     .setRef("origin/master")
-                    .call();
+                    .call();*/
         }
 
         this.builder.config = config;
 
-        configFile.set(config.toString());
+        configFile.set(config.toString(4));
     }
 }

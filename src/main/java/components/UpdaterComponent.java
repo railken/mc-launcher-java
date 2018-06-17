@@ -19,11 +19,13 @@ public class UpdaterComponent extends BaseComponent {
 
     public void execute() throws Exception
     {
-        out.println("Checking libraries");
+        this.builder.logger.info("Checking libraries");
         ArrayList<String> libraries = new ArrayList<String>();
 
 
         Storage librariesFile = new Storage(this.builder.baseDir+"modpack/bin/1.12.2.json");
+
+
 
         if (!librariesFile.exists()) {
             throw new Exception("Missing file: "+ librariesFile.getFilename());
@@ -56,17 +58,18 @@ public class UpdaterComponent extends BaseComponent {
                             throw new Exception("file not found");
 
                         if (assetFile.getSize() != o.getLong("size"))
-                            throw new Exception("mismatch size");
+                            throw new Exception("mismatch size: " + assetFile.getSize() + " != " + o.getLong("size"));
 
                         if (!assetFile.getChecksum("sha1").equals(o.getString("sha1")))
-                            throw new Exception("mismatch sha1");
+                            throw new Exception("mismatch sha1" + assetFile.getChecksum("sha1") + " != " + o.getString("sha1"));
 
                     } catch (Exception e) {
                         this.builder.logger.info(e.getMessage());
                         assetFile.download(new URL(url));
-                        out.println("Downloaded: "+url);
+                        this.builder.logger.info("Downloaded: "+url);
                     }
 
+                    this.builder.logger.info("Adding library: " + assetFile.getFilename());
                     libraries.add(assetFile.getFilename());
 
                 }
@@ -113,7 +116,7 @@ public class UpdaterComponent extends BaseComponent {
                 url = "http://resources.download.minecraft.net/" + filename.substring(0, 2) + "/" + filename;
                 assetFile.download(new URL(url));
 
-                out.println("Downloaded: " + url);
+                this.builder.logger.info("Downloaded: " + url);
             }
 
 
@@ -148,22 +151,33 @@ public class UpdaterComponent extends BaseComponent {
 
             enabled.add(filename);
 
+            this.builder.logger.info("Checking mod: " + name);
+
+            if( !mod.has("hash")) {
+                this.builder.logger.info("Checksum not found. Adding automatically: "+assetFile.getChecksum("sha1")   );
+
+                mod.put("hash", assetFile.getChecksum("sha1"));
+            }
+
             try {
 
                 if(!assetFile.exists())
-                    throw new Exception();
+                    throw new Exception("Mod " + name + " doesn't exist");
 
-                /*
-                if (!assetFile.getChecksum("sha1").equals(o.getString("hash")))
-                    throw new Exception();
-                */
+
+                if (!assetFile.getChecksum("sha1").equals(mod.getString("hash")))
+                    throw new Exception("Mod " + name + " mismatch hash" + assetFile.getChecksum("sha1") + " != " + mod.getString("hash"));
 
             } catch (Exception e) {
+                this.builder.logger.info(e.toString());
+                this.builder.logger.info("Downloading from: " + url);
                 assetFile.download(new URL(url));
-                out.println("Downloaded : " + url);
+
             }
 
         }
+
+        modpackFile.set(info.toString(4));
 
         File folder = new File(this.builder.baseDir+"/modpack/mods/");
         File[] listOfFiles = folder.listFiles();
@@ -172,7 +186,7 @@ public class UpdaterComponent extends BaseComponent {
 
             File file = listOfFiles[i];
             if (!enabled.contains(file.getName())) {
-                out.println("Removing: " + file.getName());
+                this.builder.logger.info("Removing: " + file.getName());
                 file.delete();
             }
         }

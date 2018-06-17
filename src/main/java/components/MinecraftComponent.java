@@ -1,7 +1,12 @@
 package components;
 
 import launcher.Builder;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+
+import static java.lang.System.out;
 
 public class MinecraftComponent extends BaseComponent {
 
@@ -16,8 +21,6 @@ public class MinecraftComponent extends BaseComponent {
                 "-XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump " +
                 " "+builder.config.getString("command")+" "+
                 "-Djava.library.path="+builder.baseDir+"modpack/bin/natives " +
-                "-Dfml.core.libraries.mirror=http://mirror.technicpack.net/Technic/lib/fml/%s " +
-                "-Dminecraft.applet.TargetDirectory="+builder.baseDir+"modpack " +
                 "-Djava.net.preferIPv4Stack=true " +
                 "-cp "+String.join(";",builder.libraries)+" " +
                 "net.minecraft.launchwrapper.Launch " +
@@ -41,9 +44,29 @@ public class MinecraftComponent extends BaseComponent {
 
         try {
             Runtime runTime = Runtime.getRuntime();
-            Process process = runTime.exec(command);
-        } catch (IOException ex) {
+            Process proc = runTime.exec(command);
 
+            BufferedReader stdInput = new BufferedReader(new
+                    InputStreamReader(proc.getInputStream()));
+
+            BufferedReader stdError = new BufferedReader(new
+                    InputStreamReader(proc.getErrorStream()));
+
+            // read the output from the command
+            System.out.println("Here is the standard output of the command:\n");
+            String s = null;
+            while ((s = stdInput.readLine()) != null) {
+                System.out.println(s);
+            }
+
+            // read any errors from the attempted command
+            System.out.println("Here is the standard error of the command (if any):\n");
+            while ((s = stdError.readLine()) != null) {
+                System.out.println(s);
+            }
+
+        } catch (IOException ex) {
+            out.println(ex.toString());
         }
     }
 }

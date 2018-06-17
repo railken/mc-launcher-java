@@ -28,6 +28,8 @@ public class Main{
             baseDir = Paths.get(".").toAbsolutePath().normalize().toString()+"/";
         }
 
+        baseDir = baseDir.replace("\\", "/");
+
         // Play?
         play(baseDir, nameModpack);
 
@@ -36,7 +38,7 @@ public class Main{
 
     public static void play(String baseDir, String nameModpack) throws Exception {
 
-        Builder launcherBuilder = new Builder(baseDir + "/modpacks/" + nameModpack + "/");
+        Builder launcherBuilder = new Builder(baseDir + "modpacks/" + nameModpack + "/");
 
         // Component:Configuration
         ConfigComponent configComponent = new ConfigComponent(launcherBuilder);
